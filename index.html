@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+
+	<title>DaysChart</title>
+
+	<script src="onsenui/js/onsenui.js"></script>
+	<script src="onsenui/js/angular-onsenui.js"></script>
+	<script src="angular/js/angular.js"></script>
+
+	<link rel="stylesheet" href="onsenui/css/onsenui.css">
+	<link rel="stylesheet" href="onsenui/css/onsen-css-components.css">
+
+
+	<script></script>
+</head>
+
+<body ng-app="DaysChart" ng-controller="AppController">
+<ons-page>
+	<ons-toolbar>
+		<div class="center" style="width: 100%">
+			DaysChart
+		</div>
+	</ons-toolbar>
+	<ons-tabbar var="tabbar" position="auto">
+		<ons-tab page="home.html"active ng-attr-icon="ion-ios-home-strong" label="Home"></ons-tab>
+		<ons-tab page="history.html" ng-attr-icon="ion-ios-clock-outline" label="Days"></ons-tab>
+	</ons-tabbar>
+</ons-page>
+
+
+<template id="home.html">
+<ons-page ons-show="updateToolbar('DaysChart - Home')">
+	<div class="content">
+	</div>
+</ons-page>
+</template> <!-- home.html -->
+
+
+<template id="history.html">
+<ons-page ons-show="updateToolbar('DaysChart - History')">
+	<div class="content">
+	</div>
+</ons-page>
+</template> <!-- history.html -->
+
+
+</body>
+</html>
