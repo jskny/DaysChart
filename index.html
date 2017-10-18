@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" ng-app="DaysChart">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -7,43 +7,78 @@
 
 	<title>DaysChart</title>
 
+	<script src="angular/angular.js"></script>
+
 	<script src="onsenui/js/onsenui.js"></script>
 	<script src="onsenui/js/angular-onsenui.js"></script>
-	<script src="angular/js/angular.js"></script>
 
 	<link rel="stylesheet" href="onsenui/css/onsenui.css">
 	<link rel="stylesheet" href="onsenui/css/onsen-css-components.css">
 
-
-	<script></script>
+	<script>
+	var module = angular.module('DaysChart', ['onsen']);
+	module.controller('AppController', function($scope) {
+		$scope.alert = function(message) {
+			ons.notification.alert(message);
+		};
+	});
+	</script>
 </head>
 
-<body ng-app="DaysChart" ng-controller="AppController">
+<body ng-controller="AppController">
 <ons-page>
 	<ons-toolbar>
 		<div class="center" style="width: 100%">
 			DaysChart
 		</div>
+		<div class="right">
+			<ons-toolbar-button component="button/new-task">New</ons-toolbar-button>
+		</div>
 	</ons-toolbar>
 	<ons-tabbar var="tabbar" position="auto">
-		<ons-tab page="home.html"active ng-attr-icon="ion-ios-home-strong" label="Home"></ons-tab>
+		<ons-tab page="home.html"active ng-attr-icon="ion-ios-home" label="Home"></ons-tab>
 		<ons-tab page="history.html" ng-attr-icon="ion-ios-clock-outline" label="Days"></ons-tab>
 	</ons-tabbar>
 </ons-page>
 
 
 <template id="home.html">
-<ons-page ons-show="updateToolbar('DaysChart - Home')">
-	<div class="content">
-	</div>
+<ons-page>
+	<ons-card>
+		<div style="text-align: center; font-size: 20px;">
+			Welcome !<br>
+			How do yo do ?
+		</div>
+	</ons-card>
+
+	<ons-card>
+		<div style="text-align: center; font-size: 16px;">
+			卒論の進捗ダメです
+		</div>
+	</ons-card>
+	<ons-card>
+		<div style="text-align: center; font-size: 16px;">
+			ねむい
+		</div>
+	</ons-card>
 </ons-page>
 </template> <!-- home.html -->
 
 
 <template id="history.html">
-<ons-page ons-show="updateToolbar('DaysChart - History')">
-	<div class="content">
-	</div>
+<ons-page>
+	<ons-card>
+		<div style="text-align: center;">
+			Your Days<br>
+		</div>
+	</ons-card>
+
+	<ons-list>
+		<ons-list-header>Recently</ons-list-header>
+		<ons-list-item modifier="chevron" tappable>10/18</ons-list-item>
+		<ons-list-item modifier="chevron" tappable>10/17</ons-list-item>
+		<ons-list-item modifier="chevron" tappable>10/16</ons-list-item>
+	</ons-list>
 </ons-page>
 </template> <!-- history.html -->
 
