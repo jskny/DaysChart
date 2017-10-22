@@ -15,11 +15,53 @@
 	<link rel="stylesheet" href="onsenui/css/onsenui.css">
 	<link rel="stylesheet" href="onsenui/css/onsen-css-components.css">
 
+	<style>
+ons-pull-hook .arrow {
+	transition: all 0.3s ease-in-out;
+	transform: rotate3d(0, 0, 0, 0deg);
+}
+
+ons-pull-hook[state="preaction"] .arrow {
+	transform: rotate3d(0, 0, 1, 180deg);
+}
+
+ons-pull-hook[state="action"] .arrow {
+	display: none;
+}
+
+ons-pull-hook .loader {
+	display: none;
+	transition: all 0.3s ease-in-out 0.2s;
+}
+
+ons-pull-hook[state="action"] .loader {
+	display: inline-block;
+}
+	</style>
+
 	<script>
+	var pidNewPostDialog;
 	var module = angular.module('DaysChart', ['onsen']);
-	module.controller('AppController', function($scope) {
+
+	module.controller('AppController', function($scope, $timeout) {
+		$scope.todayPosts = [
+			{ "text" : "Wellcome ! How do yo do ?" },
+			{ "text" : "卒論の進捗ダメです" },
+			{ "text" : "あああああ" }
+		];
+
+
 		$scope.alert = function(message) {
 			ons.notification.alert(message);
+		};
+
+
+		// 新規追加のダイアログ設定
+		ons.createPopover('newPostDialog.html').then(function(popover) {
+			pidNewPostDialog = popover;
+		});
+		$scope.showNewPostDialog = function() {
+			pidNewPostDialog.show("#btNewPostDialog");
 		};
 	});
 	</script>
@@ -32,11 +74,11 @@
 			DaysChart
 		</div>
 		<div class="right">
-			<ons-toolbar-button component="button/new-task">New</ons-toolbar-button>
+			<ons-toolbar-button id="btNewPostDialog" component="button/new-task" ng-click="showNewPostDialog()">New</ons-toolbar-button>
 		</div>
 	</ons-toolbar>
 	<ons-tabbar var="tabbar" position="auto">
-		<ons-tab page="home.html"active ng-attr-icon="ion-ios-home" label="Home"></ons-tab>
+		<ons-tab page="home.html" active ng-attr-icon="ion-ios-home" label="Home"></ons-tab>
 		<ons-tab page="history.html" ng-attr-icon="ion-ios-clock-outline" label="Days"></ons-tab>
 	</ons-tabbar>
 </ons-page>
@@ -44,21 +86,9 @@
 
 <template id="home.html">
 <ons-page>
-	<ons-card>
-		<div style="text-align: center; font-size: 20px;">
-			Welcome !<br>
-			How do yo do ?
-		</div>
-	</ons-card>
-
-	<ons-card>
+	<ons-card ng-repeat="item in todayPosts">
 		<div style="text-align: center; font-size: 16px;">
-			卒論の進捗ダメです
-		</div>
-	</ons-card>
-	<ons-card>
-		<div style="text-align: center; font-size: 16px;">
-			ねむい
+			{{ item.text }}
 		</div>
 	</ons-card>
 </ons-page>
@@ -68,8 +98,9 @@
 <template id="history.html">
 <ons-page>
 	<ons-card>
-		<div style="text-align: center;">
-			Your Days<br>
+		<div style="text-align: center; font-size: 24px;">
+			<strong>ようこそ！</strong><br>
+			今日の調子はどう？
 		</div>
 	</ons-card>
 
@@ -81,6 +112,16 @@
 	</ons-list>
 </ons-page>
 </template> <!-- history.html -->
+
+
+<template id="newPostDialog.html">
+<ons-popover direction="up down" cancelable cover-target>
+	<div style="text-align: center; opacity: 0.5;">
+		<p>This is a popover!</p>
+		<p><small>Click the background to remove the popover.</small></p>
+	</div>
+</ons-popover>
+</template> <!-- newPostDialog.html -->
 
 
 </body>
