@@ -64,6 +64,7 @@
 			var data = { "text" : text };
 			$scope.todayPosts.unshift(data);
 			document.getElementById("newPostText").value = "";
+			$scope.hideNewPostDialog();
 		};
 	});
 	</script>
