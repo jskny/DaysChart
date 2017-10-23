@@ -19,6 +19,13 @@
 	var pidNewPostDialog;
 	var module = angular.module('DaysChart', ['onsen']);
 
+	ons.ready(function() {
+		// 新規追加のダイアログ設定
+		ons.createPopover('newPostDialog.html').then(function(popover) {
+			pidNewPostDialog = popover;
+		});
+	});
+
 	module.controller('AppController', function($scope, $timeout) {
 		$scope.todayPosts = [
 			{ "text" : "Wellcome ! How do yo do ?" },
@@ -32,12 +39,31 @@
 		};
 
 
-		// 新規追加のダイアログ設定
-		ons.createPopover('newPostDialog.html').then(function(popover) {
-			pidNewPostDialog = popover;
-		});
 		$scope.showNewPostDialog = function() {
 			pidNewPostDialog.show("#btNewPostDialog");
+		};
+		$scope.hideNewPostDialog = function() {
+			pidNewPostDialog.hide();
+		};
+
+		// 新規追加
+		$scope.addTodayPost = function() {
+			var text = document.getElementById("newPostText").value;
+			if (text.length <= 0) {
+				$scope.hideNewPostDialog();
+				ons.notification.alert("Message is unjust.");
+				return;
+			}
+
+			if (text.length > 200) {
+				$scope.hideNewPostDialog();
+				ons.notification.alert("Message over 200 char.");
+				return;
+			}
+
+			var data = { "text" : text };
+			$scope.todayPosts.unshift(data);
+			document.getElementById("newPostText").value = "";
 		};
 	});
 	</script>
@@ -91,10 +117,13 @@
 
 
 <template id="newPostDialog.html">
-<ons-popover direction="up down" cancelable cover-target>
-	<div style="text-align: center; opacity: 0.5;">
-		<p>This is a popover!</p>
-		<p><small>Click the background to remove the popover.</small></p>
+<ons-popover cancelable cover-target>
+	<div style="text-align: center;">
+		<p style="font-size: 16px;">メモる</p>
+		<textarea id="newPostText" class="textarea" rows="5" placeholder="いま何してる？"></textarea>
+		<br><br>
+		<ons-button ng-click="addTodayPost()">Post</ons-button>
+		<ons-button ng-click="hideNewPostDialog()">Cancel</ons-button>
 	</div>
 </ons-popover>
 </template> <!-- newPostDialog.html -->
