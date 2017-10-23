@@ -15,30 +15,6 @@
 	<link rel="stylesheet" href="onsenui/css/onsenui.css">
 	<link rel="stylesheet" href="onsenui/css/onsen-css-components.css">
 
-	<style>
-ons-pull-hook .arrow {
-	transition: all 0.3s ease-in-out;
-	transform: rotate3d(0, 0, 0, 0deg);
-}
-
-ons-pull-hook[state="preaction"] .arrow {
-	transform: rotate3d(0, 0, 1, 180deg);
-}
-
-ons-pull-hook[state="action"] .arrow {
-	display: none;
-}
-
-ons-pull-hook .loader {
-	display: none;
-	transition: all 0.3s ease-in-out 0.2s;
-}
-
-ons-pull-hook[state="action"] .loader {
-	display: inline-block;
-}
-	</style>
-
 	<script>
 	var pidNewPostDialog;
 	var module = angular.module('DaysChart', ['onsen']);
