@@ -27,11 +27,7 @@
 	});
 
 	module.controller('AppController', function($scope, $timeout) {
-		$scope.todayPosts = [
-			{ "text" : "Wellcome ! How do yo do ?" },
-			{ "text" : "卒論の進捗ダメです" },
-			{ "text" : "あああああ" }
-		];
+		$scope.todayPosts = [];
 
 
 		$scope.alert = function(message) {
@@ -61,7 +57,22 @@
 				return;
 			}
 
-			var data = { "text" : text };
+			// 時刻記載
+			var dt = new Date();
+			var data = {
+				"text" : text,
+				"timestamp" : dt.getTime(),
+				// これいるか？
+				"date" : {
+					"year" : dt.getFullYear(),
+					"month" : dt.getMonth()+1,
+					"day" : dt.getDate(),
+					"hours" : dt.getHours(),
+					"minutes" : dt.getMinutes(),
+					"seconds" : dt.getSeconds()
+				}
+			};
+
 			$scope.todayPosts.unshift(data);
 			document.getElementById("newPostText").value = "";
 			$scope.hideNewPostDialog();
@@ -90,8 +101,15 @@
 <template id="home.html">
 <ons-page>
 	<ons-card ng-repeat="item in todayPosts">
-		<div style="text-align: center; font-size: 16px;">
-			{{ item.text }}
+		<div class="title">{{ item.text }}</div>
+		<div class="content">{{ item.date.hours }}時{{ item.date.minutes }}分{{ item.date.seconds }}秒</div>
+	</ons-card>
+
+	<ons-card ng-show="todayPosts.length == 0">
+		<img src="image/nopost.png" alt="DaysChart" style="width: 100%">
+		<div classs="content">
+			今日はまだ何も記録していません。<br>
+			It hasn't recorded anything today.
 		</div>
 	</ons-card>
 </ons-page>
@@ -101,10 +119,7 @@
 <template id="history.html">
 <ons-page>
 	<ons-card>
-		<div style="text-align: center; font-size: 24px;">
-			<strong>ようこそ！</strong><br>
-			今日の調子はどう？
-		</div>
+		<img src="image/screenlogo.png" alt="DaysChart" style="width: 100%">
 	</ons-card>
 
 	<ons-list>
