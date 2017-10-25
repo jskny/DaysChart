@@ -3,8 +3,21 @@
  *	jskny
  */
 
+ /*
+  *	データ保存形式
+  *
+  *	[個々のポスト]
+  *	text | timestamp
+  *
+  *	過去ログデーターベース
+  *	posts	->	today		-> 0..* [個々のポスト]
+  *		->	20171025	-> 0..* [個々のポスト]
+  *		->	20171024	-> 0..* [個々のポスト]
+  */
+
+
 var pidNewPostDialog;
-var module = angular.module('DaysChart', ['onsen']);
+var module = angular.module('DaysChart', ['onsen', "ngStorage"]);
 
 ons.ready(function() {
 	// 新規追加のダイアログ設定
@@ -13,9 +26,44 @@ ons.ready(function() {
 	});
 });
 
-module.controller('AppController', function($scope, $timeout) {
-	$scope.todayPosts = [];
+module.controller('AppController', function($scope, $localStorage, $sessionStorage, $timeout) {
+	// localStorage から過去ログを取得等する
+	$scope.$storage = $localStorage.$default(
+	[{
+		"posts" : {
+			"today" : []
+		}
+	}]);
 
+	// 過去ログを検索し、今日と違う日付のポストがある場合、それらをまとめる。
+	var dt = new Date();
+	var delList = [];
+	for(var i = 0; i < $scope.$storage[0]["posts"]["today"].length; i++) {
+		var item = $scope.$storage[0]["posts"]["today"][i];
+		var dtItem = new Date(item.ts);
+		if (
+			dt.getFullYear() != dtItem.getFullYear() ||
+			dt.getMonth() != dtItem.getMonth() ||
+			dt.getDate() != dtItem.getDate()
+		) {
+			var keyText = dtItem.getFullYear() + dtItem.getMonth() + dtItem.getDate();
+			if ($scope.$storage[0]["posts"][keyText] == undefined) {
+				$scope.$storage[0]["posts"][keyText] = [];
+			}
+
+			$scope.$storage[0]["posts"][keyText].unshift(item);
+			delList.push(i);
+		}
+	}
+
+	// 当日以外のを消去
+	for(var i = 0; i < delList.length; i++) {
+		delete $scope.$storage[0]["posts"]["today"][i];
+	}
+
+
+	// きれいなデータ
+	$scope.todayPosts = $scope.$storage[0]["posts"]["today"];
 
 	$scope.showNewPostDialog = function() {
 		pidNewPostDialog.show("#btNewPostDialog");
@@ -43,12 +91,14 @@ module.controller('AppController', function($scope, $timeout) {
 		var dt = new Date();
 		var data = {
 			"text" : text,
-			"timestamp" : dt.getTime()
+			"ts" : dt.getTime()
 		};
 
 		$scope.todayPosts.unshift(data);
 		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-		$scope.todayPosts.sort(sort_by("timestamp", true));
+		$scope.todayPosts.sort(sort_by("ts", true));
+		$scope.$storage[0]["posts"]["today"] = $scope.todayPosts;
+
 		document.getElementById("newPostText").value = "";
 		$scope.hideNewPostDialog();
 	};
