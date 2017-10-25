@@ -1,0 +1,14 @@
+﻿<ons-page>
+	<ons-card ng-repeat="item in todayPosts">
+		<div class="title">{{ item.text }}</div>
+		<div class="content">{{ item.date.hours }}時{{ item.date.minutes }}分{{ item.date.seconds }}秒</div>
+	</ons-card>
+
+	<ons-card ng-show="todayPosts.length == 0">
+		<img src="image/nopost.png" alt="DaysChart" style="width: 100%">
+		<div classs="content">
+			今日はまだ何も記録していません。<br>
+			It hasn't recorded anything today.
+		</div>
+	</ons-card>
+</ons-page>

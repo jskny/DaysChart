@@ -15,92 +15,7 @@
 	<link rel="stylesheet" href="onsenui/css/onsenui.css">
 	<link rel="stylesheet" href="onsenui/css/onsen-css-components.css">
 
-	<script>
-	var pidNewPostDialog;
-	var module = angular.module('DaysChart', ['onsen']);
-
-	ons.ready(function() {
-		// 新規追加のダイアログ設定
-		ons.createPopover('newPostDialog.html').then(function(popover) {
-			pidNewPostDialog = popover;
-		});
-	});
-
-	module.controller('AppController', function($scope, $timeout) {
-		$scope.todayPosts = [];
-
-
-		$scope.alert = function(message) {
-			ons.notification.alert(message);
-		};
-
-
-		$scope.showNewPostDialog = function() {
-			pidNewPostDialog.show("#btNewPostDialog");
-		};
-		$scope.hideNewPostDialog = function() {
-			pidNewPostDialog.hide();
-		};
-
-		// 新規追加
-		$scope.addTodayPost = function() {
-			var text = document.getElementById("newPostText").value;
-			if (text.length <= 0) {
-				$scope.hideNewPostDialog();
-				ons.notification.alert("Message is unjust.");
-				return;
-			}
-
-			if (text.length > 200) {
-				$scope.hideNewPostDialog();
-				ons.notification.alert("Message over 200 char.");
-				return;
-			}
-
-			// 時刻記載
-			var dt = new Date();
-			var data = {
-				"text" : text,
-				"timestamp" : dt.getTime(),
-				// これいるか？
-				"date" : {
-					"year" : dt.getFullYear(),
-					"month" : dt.getMonth()+1,
-					"day" : dt.getDate(),
-					"hours" : dt.getHours(),
-					"minutes" : dt.getMinutes(),
-					"seconds" : dt.getSeconds()
-				}
-			};
-
-			$scope.todayPosts.unshift(data);
-			// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-			$scope.todayPosts.sort(sort_by("timestamp", true, function(a) { return (a); }));
-			document.getElementById("newPostText").value = "";
-			$scope.hideNewPostDialog();
-		};
-	});
-
-
-	// json オブジェクトをソートするコード
-	// http://www.koikikukan.com/archives/2011/04/05-025555.php
-	// example : data.sort(sort_by('id', false, function(a){return a.toUpperCase()}));
-	var sort_by = function(field, reverse, primer) {
-		reverse = (reverse) ? -1 : 1;
-		return function(a, b) {
-			a = a[field];
-			b = b[field];
-
-			if (typeof(primer) != 'undefined'){
-				a = primer(a);
-				b = primer(b);
-			}
-			if (a<b) return reverse * -1;
-			if (a>b) return reverse * 1;
-			return 0;
-		}
-	}
-	</script>
+	<script type="text/javascript" src="app.js"></script>
 </head>
 
 <body ng-controller="AppController">
@@ -114,58 +29,9 @@
 		</div>
 	</ons-toolbar>
 	<ons-tabbar var="tabbar" position="auto">
-		<ons-tab page="home.html" active ng-attr-icon="ion-ios-home" label="Home"></ons-tab>
-		<ons-tab page="history.html" ng-attr-icon="ion-ios-clock-outline" label="Days"></ons-tab>
+		<ons-tab page="template/home.html" active ng-attr-icon="ion-ios-home" label="Home"></ons-tab>
+		<ons-tab page="template/history.html" ng-attr-icon="ion-ios-clock-outline" label="Days"></ons-tab>
 	</ons-tabbar>
 </ons-page>
-
-
-<template id="home.html">
-<ons-page>
-	<ons-card ng-repeat="item in todayPosts">
-		<div class="title">{{ item.text }}</div>
-		<div class="content">{{ item.date.hours }}時{{ item.date.minutes }}分{{ item.date.seconds }}秒</div>
-	</ons-card>
-
-	<ons-card ng-show="todayPosts.length == 0">
-		<img src="image/nopost.png" alt="DaysChart" style="width: 100%">
-		<div classs="content">
-			今日はまだ何も記録していません。<br>
-			It hasn't recorded anything today.
-		</div>
-	</ons-card>
-</ons-page>
-</template> <!-- home.html -->
-
-
-<template id="history.html">
-<ons-page>
-	<ons-card>
-		<img src="image/screenlogo.png" alt="DaysChart" style="width: 100%">
-	</ons-card>
-
-	<ons-list>
-		<ons-list-header>Recently</ons-list-header>
-		<ons-list-item modifier="chevron" tappable>10/18</ons-list-item>
-		<ons-list-item modifier="chevron" tappable>10/17</ons-list-item>
-		<ons-list-item modifier="chevron" tappable>10/16</ons-list-item>
-	</ons-list>
-</ons-page>
-</template> <!-- history.html -->
-
-
-<template id="newPostDialog.html">
-<ons-popover cancelable cover-target>
-	<div style="text-align: center;">
-		<p style="font-size: 16px;">メモる</p>
-		<textarea id="newPostText" class="textarea" rows="5" placeholder="いま何してる？"></textarea>
-		<br><br>
-		<ons-button ng-click="addTodayPost()">Post</ons-button>
-		<ons-button ng-click="hideNewPostDialog()">Cancel</ons-button>
-	</div>
-</ons-popover>
-</template> <!-- newPostDialog.html -->
-
-
 </body>
 </html>
