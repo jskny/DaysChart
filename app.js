@@ -43,16 +43,7 @@ module.controller('AppController', function($scope, $timeout) {
 		var dt = new Date();
 		var data = {
 			"text" : text,
-			"timestamp" : dt.getTime(),
-			// これいるか？
-			"date" : {
-				"year" : dt.getFullYear(),
-				"month" : dt.getMonth()+1,
-				"day" : dt.getDate(),
-				"hours" : dt.getHours(),
-				"minutes" : dt.getMinutes(),
-				"seconds" : dt.getSeconds()
-			}
+			"timestamp" : dt.getTime()
 		};
 
 		$scope.todayPosts.unshift(data);

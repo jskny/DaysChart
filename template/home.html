@@ -1,7 +1,7 @@
 ﻿<ons-page>
 	<ons-card ng-repeat="item in todayPosts">
 		<div class="title">{{ item.text }}</div>
-		<div class="content">{{ item.date.hours }}時{{ item.date.minutes }}分{{ item.date.seconds }}秒</div>
+		<div class="content">{{ item.timestamp | date: 'HH時mm分ss秒' }}</div>
 	</ons-card>
 
 	<ons-card ng-show="todayPosts.length == 0">
