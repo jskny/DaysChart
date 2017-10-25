@@ -1,4 +1,9 @@
-﻿var pidNewPostDialog;
+﻿/*
+ *	DaysChart
+ *	jskny
+ */
+
+var pidNewPostDialog;
 var module = angular.module('DaysChart', ['onsen']);
 
 ons.ready(function() {
@@ -10,11 +15,6 @@ ons.ready(function() {
 
 module.controller('AppController', function($scope, $timeout) {
 	$scope.todayPosts = [];
-
-
-	$scope.alert = function(message) {
-		ons.notification.alert(message);
-	};
 
 
 	$scope.showNewPostDialog = function() {
@@ -57,15 +57,18 @@ module.controller('AppController', function($scope, $timeout) {
 
 		$scope.todayPosts.unshift(data);
 		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-		$scope.todayPosts.sort(sort_by("timestamp", true, function(a) { return (a); }));
+		$scope.todayPosts.sort(sort_by("timestamp", true));
 		document.getElementById("newPostText").value = "";
 		$scope.hideNewPostDialog();
 	};
 });
 
 
+//-------------------------------------
+
+
 // json オブジェクトをソートするコード
-// http://www.koikikukan.com/archives/2011/04/05-025555.php
+// from : http://www.koikikukan.com/archives/2011/04/05-025555.php
 // example : data.sort(sort_by('id', false, function(a){return a.toUpperCase()}));
 var sort_by = function(field, reverse, primer) {
 	reverse = (reverse) ? -1 : 1;
