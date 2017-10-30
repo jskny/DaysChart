@@ -81,7 +81,15 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		pidNewPostDialog.hide();
 	};
 
-	$scope.$applyAsync();
+
+	$scope.$watch('todayPosts', function(newValue, oldValue) {
+		// $scope.todayPosts が変更された際に，以下の処理が実行されます
+		console.log('"todayPosts" changed');
+	});
+	$scope.$watch('dbPostListNum', function(newValue, oldValue) {
+		// $scope.todayPosts が変更された際に，以下の処理が実行されます
+		console.log('"dbPostListNum" changed');
+	});
 
 
 	// 新規追加
@@ -114,10 +122,9 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 			$scope.$storage[0]["today"] = $scope.todayPosts;
 
 			document.getElementById("newPostText").value = "";
-			$scope.hideNewPostDialog();
 
-			$scope.$applyAsync();
-		},10);
+			$scope.hideNewPostDialog();
+		}, 1);
 	};
 });
 
