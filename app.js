@@ -29,6 +29,12 @@ ons.ready(function() {
 });
 
 module.controller('AppController', function($scope, $localStorage, $sessionStorage, $timeout) {
+	setInterval(function () {
+		$scope.counter += 1;
+		$scope.$apply();
+	}, 100);
+
+
 	// localStorage から過去ログを取得等する
 	$scope.$storage = $localStorage.$default(
 	[{
@@ -81,6 +87,7 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		pidNewPostDialog.hide();
 	};
 
+
 	// 新規追加
 	$scope.addTodayPost = function() {
 		var text = document.getElementById("newPostText").value;
@@ -102,6 +109,7 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 			"text" : text,
 			"ts" : dt.getTime()
 		};
+
 
 		$scope.todayPosts.unshift(data);
 		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
