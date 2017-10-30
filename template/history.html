@@ -4,7 +4,7 @@
 	</ons-card>
 
 	<div ng-show="dbPostListNum >= 2">
-		<ons-list ng-repeat="postLists in $storage[0]['db']">
+		<ons-list ng-repeat="postLists in $storage[0]['db']" ng-cloak>
 			<ons-list-header>{{ postLists[0].ts | date: "yyyy/MM/dd" }}</ons-list-header>
 			<ons-card ng-repeat="item in postLists">
 				<div style="font-size: 14px;">{{ item.text }}</div>
@@ -14,7 +14,7 @@
 	</div>
 
 	<!-- today のみの時 -->
-	<ons-card ng-show="dbPostListNum <= 1">
+	<ons-card ng-show="dbPostListNum <= 1" ng-cloak>
 		過去ログには情報が記載されておりません。
 	</ons-card>
 </ons-page>

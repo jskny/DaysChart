@@ -1,5 +1,5 @@
 ﻿<ons-page>
-	<ons-card ng-repeat="item in todayPosts">
+	<ons-card ng-repeat="item in todayPosts" ng-cloak>
 		<div class="title">{{ item.text }}</div>
 		<div class="content">{{ item.ts | date: 'HH時mm分ss秒' }}</div>
 	</ons-card>
