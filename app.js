@@ -82,18 +82,13 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 	};
 
 
-	$scope.$watch('todayPosts', function(newValue, oldValue) {
-		// $scope.todayPosts が変更された際に，以下の処理が実行されます
-		console.log('"todayPosts" changed');
-	});
-	$scope.$watch('dbPostListNum', function(newValue, oldValue) {
-		// $scope.todayPosts が変更された際に，以下の処理が実行されます
-		console.log('"dbPostListNum" changed');
-	});
-
-
 	// 新規追加
 	$scope.addTodayPost = function() {
+		// 100 ミリ秒後にビューを更新
+		setTimeout(function() {
+			$scope.$apply();
+		}, 100);
+
 		var text = document.getElementById("newPostText").value;
 		if (text.length <= 0) {
 			$scope.hideNewPostDialog();
@@ -115,16 +110,14 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		};
 
 
-		$timeout(function (){
-			$scope.todayPosts.unshift(data);
-			// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-			$scope.todayPosts.sort(sort_by("ts", true));
-			$scope.$storage[0]["today"] = $scope.todayPosts;
+		$scope.todayPosts.unshift(data);
+		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
+		$scope.todayPosts.sort(sort_by("ts", true));
+		$scope.$storage[0]["today"] = $scope.todayPosts;
 
-			document.getElementById("newPostText").value = "";
+		document.getElementById("newPostText").value = "";
 
-			$scope.hideNewPostDialog();
-		}, 1);
+		$scope.hideNewPostDialog();
 	};
 });
 
