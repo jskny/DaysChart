@@ -81,9 +81,8 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		pidNewPostDialog.hide();
 	};
 
-	if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-		$scope.$apply();
-	}
+	$scope.$applyAsync();
+
 
 	// 新規追加
 	$scope.addTodayPost = function() {
@@ -116,9 +115,7 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		document.getElementById("newPostText").value = "";
 		$scope.hideNewPostDialog();
 
-		if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-			$scope.$apply();
-		}
+		$scope.$applyAsync();
 	};
 });
 
