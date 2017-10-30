@@ -107,15 +107,17 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		};
 
 
-		$scope.todayPosts.unshift(data);
-		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-		$scope.todayPosts.sort(sort_by("ts", true));
-		$scope.$storage[0]["today"] = $scope.todayPosts;
+		$timeout(function (){
+			$scope.todayPosts.unshift(data);
+			// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
+			$scope.todayPosts.sort(sort_by("ts", true));
+			$scope.$storage[0]["today"] = $scope.todayPosts;
 
-		document.getElementById("newPostText").value = "";
-		$scope.hideNewPostDialog();
+			document.getElementById("newPostText").value = "";
+			$scope.hideNewPostDialog();
 
-		$scope.$applyAsync();
+			$scope.$applyAsync();
+		},10);
 	};
 });
 
