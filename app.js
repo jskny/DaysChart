@@ -40,13 +40,19 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 	var delList = [];
 	for(var i = 0; i < $scope.$storage[0]["posts"]["today"].length; i++) {
 		var item = $scope.$storage[0]["posts"]["today"][i];
+		if (item == null) {
+			delList.push(i);
+			continue;
+		}
+
+
 		var dtItem = new Date(item.ts);
 		if (
 			dt.getFullYear() != dtItem.getFullYear() ||
 			dt.getMonth() != dtItem.getMonth() ||
 			dt.getDate() != dtItem.getDate()
 		) {
-			var keyText = dtItem.getFullYear() + dtItem.getMonth() + dtItem.getDate();
+			var keyText = String(dtItem.getFullYear()) + "/" + String(dtItem.getMonth()) + "/" + String(dtItem.getDate());
 			if ($scope.$storage[0]["posts"][keyText] == undefined) {
 				$scope.$storage[0]["posts"][keyText] = [];
 			}
@@ -56,14 +62,14 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		}
 	}
 
-	// 当日以外のを消去
-	for(var i = 0; i < delList.length; i++) {
-		delete $scope.$storage[0]["posts"]["today"][i];
-	}
+
+	// 今日のではない要素を除去
+	$scope.$storage[0]["posts"]["today"] = DelArrayItem($scope.$storage[0]["posts"]["today"], delList);
 
 
 	// きれいなデータ
-	$scope.todayPosts = $scope.$storage[0]["posts"]["today"];
+	// Javascript では配列のコピーで = を使うと下の配列への参照を返すのみなので concat でコピーオブジェクトを作成する。
+	$scope.todayPosts = $scope.$storage[0]["posts"]["today"].concat();
 
 	$scope.showNewPostDialog = function() {
 		pidNewPostDialog.show("#btNewPostDialog");
@@ -106,6 +112,28 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 
 
 //-------------------------------------
+
+
+// 特定の要素を splite で消す
+function DelArrayItem(org, delList) {
+	var retArray = org.concat();
+
+	// 使用しないのを delete ( 当該要素は null になる )
+	for(var i = 0; i < delList.length; ++i) {
+		delete retArray[delList[i]];
+	}
+
+	for (var i = 0; i < delList.length; ++i) {
+		for (var j = 0; j < retArray.length; ++j) {
+			if (retArray[j] == null) {
+				retArray.splice(j, 1);
+				break;
+			}
+		}
+	}
+
+	return (retArray);
+}
 
 
 // json オブジェクトをソートするコード
