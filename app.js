@@ -29,12 +29,6 @@ ons.ready(function() {
 });
 
 module.controller('AppController', function($scope, $localStorage, $sessionStorage, $timeout) {
-	setInterval(function () {
-		$scope.counter += 1;
-		$scope.$apply();
-	}, 100);
-
-
 	// localStorage から過去ログを取得等する
 	$scope.$storage = $localStorage.$default(
 	[{
@@ -87,6 +81,9 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		pidNewPostDialog.hide();
 	};
 
+	if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+		$scope.$apply();
+	}
 
 	// 新規追加
 	$scope.addTodayPost = function() {
@@ -118,6 +115,10 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 
 		document.getElementById("newPostText").value = "";
 		$scope.hideNewPostDialog();
+
+		if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+			$scope.$apply();
+		}
 	};
 });
 
