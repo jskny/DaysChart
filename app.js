@@ -9,9 +9,11 @@
   *	[個々のポスト]
   *	text | ts(timestamp)
   *
+  *	個別振り分け前のポストデータを入れるところ
+  *	today		-> 0..* [個々のポスト]
+  *
   *	過去ログデーターベース
-  *	posts	->	"today"		-> 0..* [個々のポスト]
-  *		->	"2017/10/25"	-> 0..* [個々のポスト]
+  *	db	->	"2017/10/25"	-> 0..* [個々のポスト]
   *		->	"2017/10/24"	-> 0..* [個々のポスト]
   */
 
@@ -30,16 +32,16 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 	// localStorage から過去ログを取得等する
 	$scope.$storage = $localStorage.$default(
 	[{
-		"posts" : {
-			"today" : []
+		"today" : [],
+		"db" : {
 		}
 	}]);
 
 	// 過去ログを検索し、今日と違う日付のポストがある場合、それらをまとめる。
 	var dt = new Date();
 	var delList = [];
-	for(var i = 0; i < $scope.$storage[0]["posts"]["today"].length; i++) {
-		var item = $scope.$storage[0]["posts"]["today"][i];
+	for(var i = 0; i < $scope.$storage[0]["today"].length; i++) {
+		var item = $scope.$storage[0]["today"][i];
 		if (item == null) {
 			delList.push(i);
 			continue;
@@ -53,23 +55,24 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 			dt.getDate() != dtItem.getDate()
 		) {
 			var keyText = String(dtItem.getFullYear()) + "/" + String(dtItem.getMonth()) + "/" + String(dtItem.getDate());
-			if ($scope.$storage[0]["posts"][keyText] == undefined) {
-				$scope.$storage[0]["posts"][keyText] = [];
+			if ($scope.$storage[0]["db"][keyText] == undefined) {
+				$scope.$storage[0]["db"][keyText] = [];
 			}
 
-			$scope.$storage[0]["posts"][keyText].unshift(item);
+			$scope.$storage[0]["db"][keyText].unshift(item);
 			delList.push(i);
 		}
 	}
 
 
 	// 今日のではない要素を除去
-	$scope.$storage[0]["posts"]["today"] = DelArrayItem($scope.$storage[0]["posts"]["today"], delList);
-
+	$scope.$storage[0]["today"] = DelArrayItem($scope.$storage[0]["today"], delList);
+	// db 要素数
+	$scope.dbPostListNum = Object.keys($scope.$storage[0]['db']).length;
 
 	// きれいなデータ
 	// Javascript では配列のコピーで = を使うと下の配列への参照を返すのみなので concat でコピーオブジェクトを作成する。
-	$scope.todayPosts = $scope.$storage[0]["posts"]["today"].concat();
+	$scope.todayPosts = $scope.$storage[0]["today"].concat();
 
 	$scope.showNewPostDialog = function() {
 		pidNewPostDialog.show("#btNewPostDialog");
@@ -103,7 +106,7 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		$scope.todayPosts.unshift(data);
 		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
 		$scope.todayPosts.sort(sort_by("ts", true));
-		$scope.$storage[0]["posts"]["today"] = $scope.todayPosts;
+		$scope.$storage[0]["today"] = $scope.todayPosts;
 
 		document.getElementById("newPostText").value = "";
 		$scope.hideNewPostDialog();

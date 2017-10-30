@@ -3,11 +3,18 @@
 		<img src="image/screenlogo.png" alt="DaysChart" style="width: 100%">
 	</ons-card>
 
-	<ons-list ng-repeat="postLists in $storage[0]['posts']">
-		<ons-list-header>{{ postLists[0].ts | date: "yyyy/MM/dd" }}</ons-list-header>
-		<ons-card ng-repeat="item in postLists">
-			<div style="font-size: 14px;">{{ item.text }}</div>
-			<div style="font-size: 8px;">{{ item.ts | date: 'HH:mm:ss' }}</div>
-		</ons-card>
-	</ons-list>
+	<div ng-show="dbPostListNum >= 2">
+		<ons-list ng-repeat="postLists in $storage[0]['db']">
+			<ons-list-header>{{ postLists[0].ts | date: "yyyy/MM/dd" }}</ons-list-header>
+			<ons-card ng-repeat="item in postLists">
+				<div style="font-size: 14px;">{{ item.text }}</div>
+				<div style="font-size: 8px;">{{ item.ts | date: 'HH:mm:ss' }}</div>
+			</ons-card>
+		</ons-list>
+	</div>
+
+	<!-- today のみの時 -->
+	<ons-card ng-show="dbPostListNum <= 1">
+		過去ログには情報が記載されておりません。
+	</ons-card>
 </ons-page>
