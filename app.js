@@ -113,9 +113,6 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		document.getElementById("newPostText").value = "";
 
 		$scope.hideNewPostDialog();
-
-		// 強制的に Angular のビューを再構築する
-		location.reload();
 	};
 });
 
