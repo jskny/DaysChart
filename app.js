@@ -68,11 +68,13 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 	// 今日のではない要素を除去
 	$scope.$storage[0]["today"] = DelArrayItem($scope.$storage[0]["today"], delList);
 	// db 要素数
-	$scope.dbPostListNum = Object.keys($scope.$storage[0]['db']).length;
+	$timeout(function() {
+		$scope.dbPostListNum = Object.keys($scope.$storage[0]['db']).length;
 
-	// きれいなデータ
-	// Javascript では配列のコピーで = を使うと下の配列への参照を返すのみなので concat でコピーオブジェクトを作成する。
-	$scope.todayPosts = $scope.$storage[0]["today"].concat();
+		// きれいなデータ
+		// Javascript では配列のコピーで = を使うと下の配列への参照を返すのみなので concat でコピーオブジェクトを作成する。
+		$scope.todayPosts = $scope.$storage[0]["today"].concat();
+	});
 
 	$scope.showNewPostDialog = function() {
 		pidNewPostDialog.show("#btNewPostDialog");
@@ -104,11 +106,12 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 			"ts" : dt.getTime()
 		};
 
-
-		$scope.todayPosts.unshift(data);
-		// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
-		$scope.todayPosts.sort(sort_by("ts", true));
-		$scope.$storage[0]["today"] = $scope.todayPosts;
+		$timeout(function() {
+			$scope.todayPosts.unshift(data);
+			// 第二引数を true にすると最新のを先頭にする、逆に false にすると最新のを後ろにする。
+			$scope.todayPosts.sort(sort_by("ts", true));
+			$scope.$storage[0]["today"] = $scope.todayPosts;
+		});
 
 		document.getElementById("newPostText").value = "";
 
