@@ -84,11 +84,6 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 
 	// 新規追加
 	$scope.addTodayPost = function() {
-		// 100 ミリ秒後にビューを更新
-		setTimeout(function() {
-			$scope.$apply();
-		}, 100);
-
 		var text = document.getElementById("newPostText").value;
 		if (text.length <= 0) {
 			$scope.hideNewPostDialog();
@@ -118,6 +113,9 @@ module.controller('AppController', function($scope, $localStorage, $sessionStora
 		document.getElementById("newPostText").value = "";
 
 		$scope.hideNewPostDialog();
+
+		// 強制的に Angular のビューを再構築する
+		location.reload();
 	};
 });
 
